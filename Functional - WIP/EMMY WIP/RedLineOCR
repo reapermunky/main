@@ -1,0 +1,197 @@
+# RedLineOCR: A simple OCR tool with overlay to extract text from a screen region.
+# Precursor to E.M.M.Y.
+import pytesseract
+from PIL import ImageGrab, ImageOps, Image
+import pyautogui
+import mouse
+import keyboard
+import tkinter as tk
+from tkinter import filedialog
+from pystray import Icon, Menu, MenuItem
+from PIL import Image as PILImage, ImageDraw
+import threading
+import time
+import queue
+
+# Configure Tesseract path
+pytesseract.pytesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+# Global variables
+extracted_text = ""
+global_exit = False
+task_queue = queue.Queue()  # Queue to pass tasks to the main thread
+tray_icon = None
+
+def create_tray_icon():
+    global tray_icon
+
+    def idle_icon():
+        icon = PILImage.new("RGB", (64, 64), "black")
+        draw = ImageDraw.Draw(icon)
+        draw.ellipse((8, 8, 56, 56), fill="black")
+        return icon
+
+    def active_icon():
+        icon = PILImage.new("RGB", (64, 64), "black")
+        draw = ImageDraw.Draw(icon)
+        draw.ellipse((8, 8, 56, 56), fill="green")
+        return icon
+
+    def on_quit(icon, item):
+        exit_program()
+
+    menu = Menu(MenuItem("Quit", on_quit))
+    tray_icon = Icon("OCR Tool", idle_icon(), menu=menu)
+
+    def update_icon(is_active):
+        tray_icon.icon = active_icon() if is_active else idle_icon()
+        tray_icon.update_menu()
+
+    tray_icon.run_detached()
+    return update_icon
+
+def show_overlay_async(x1, y1, x2, y2):
+    root = tk.Toplevel()
+    root.attributes("-fullscreen", True)
+    root.attributes("-topmost", True)
+    root.attributes("-alpha", 0.3)
+    root.configure(bg="black")
+
+    canvas = tk.Canvas(root, bg="black", highlightthickness=0)
+    canvas.pack(fill=tk.BOTH, expand=True)
+    canvas.create_rectangle(x1, y1, x2, y2, outline="red", width=2)
+
+    def fade_out(alpha):
+        if alpha > 0:
+            root.attributes("-alpha", alpha / 100)
+            root.after(50, fade_out, alpha - 1)
+        else:
+            root.destroy()
+
+    root.after(0, fade_out, 30)
+    root.mainloop()
+
+def select_screen_region():
+    print("Move your mouse to the top-left corner of the region and click.")
+    while not mouse.is_pressed(button="left"):
+        if global_exit:
+            return None
+    x1, y1 = pyautogui.position()
+    while mouse.is_pressed(button="left"):
+        pass
+    print(f"Top-left corner marked at: ({x1}, {y1})")
+
+    print("Move your mouse to the bottom-right corner of the region and click.")
+    while not mouse.is_pressed(button="left"):
+        if global_exit:
+            return None
+    x2, y2 = pyautogui.position()
+    while mouse.is_pressed(button="left"):
+        pass
+    print(f"Bottom-right corner marked at: ({x2}, {y2})")
+
+    if x1 == x2 or y1 == y2:
+        print("\n[ERROR] Invalid region size. Please ensure the region has a non-zero width and height.")
+        return None
+
+    threading.Thread(target=show_overlay_async, args=(x1, y1, x2, y2), daemon=True).start()
+    return (min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2))
+
+def preprocess_image(image):
+    image = ImageOps.grayscale(image)
+    image = ImageOps.autocontrast(image)
+    image = image.resize((image.width * 3, image.height * 3), Image.LANCZOS)
+    return image
+
+def capture_and_ocr(region):
+    screenshot = ImageGrab.grab(bbox=region)
+    processed_image = preprocess_image(screenshot)
+    return pytesseract.image_to_string(processed_image).strip()
+
+def select_region_action():
+    global extracted_text
+    print("\n[HOTKEY] Selecting a screen region...")
+    update_tray_icon(True)
+    region = select_screen_region()
+    if region is None:
+        print("[HOTKEY] Region selection failed. Try again.")
+        update_tray_icon(False)
+        return
+
+    print("\n[HOTKEY] Performing OCR...")
+    try:
+        extracted_text = capture_and_ocr(region)
+        print("\nExtracted Text:")
+        print(extracted_text)
+    except Exception as e:
+        print(f"[ERROR] An error occurred during OCR: {e}")
+    finally:
+        update_tray_icon(False)
+
+def save_text_action():
+    if not extracted_text:
+        print("\n[HOTKEY] No text to save. Perform OCR first!")
+        return
+
+    print("\n[HOTKEY] Saving extracted text to a file...")
+    task_queue.put(open_save_dialog)
+
+def open_save_dialog():
+    root = tk.Tk()
+    root.withdraw()
+    root.attributes("-topmost", True)
+    file_path = filedialog.asksaveasfilename(
+        defaultextension=".txt",
+        filetypes=[("Text files", "*.txt")],
+        title="Save extracted text"
+    )
+    if file_path:
+        with open(file_path, "w", encoding="utf-8") as file:
+            file.write(extracted_text)
+        print(f"Text successfully saved to {file_path}")
+    else:
+        print("[HOTKEY] Save canceled.")
+    root.destroy()
+
+def exit_program():
+    global global_exit
+    global_exit = True
+    print("\nExiting the program...")
+    if tray_icon:
+        tray_icon.stop()
+    cleanup()
+    exit(0)
+
+def cleanup():
+    print("Cleaning up resources...")
+
+if __name__ == "__main__":
+    print("Welcome to the OCR Tool with Overlay!")
+    print("Hotkeys:")
+    print("  - Press 'Alt+R' to select a region and perform OCR.")
+    print("  - Press 'Alt+S' to save the extracted text to a file.")
+    print("  - Press 'Alt+Q' to quit the program.")
+
+    try:
+        # Initialize the tray icon and hotkeys
+        update_tray_icon = create_tray_icon()
+        keyboard.add_hotkey("alt+r", select_region_action)
+        keyboard.add_hotkey("alt+s", save_text_action)
+        keyboard.add_hotkey("alt+q", exit_program)
+
+        print("\nListening for hotkeys... Press 'Alt+Q' to quit.")
+        while not global_exit:
+            try:
+                # Process any tasks in the queue
+                task = task_queue.get_nowait()
+                task()
+            except queue.Empty:
+                pass
+            time.sleep(0.1)  # Prevent high CPU usage
+    except KeyboardInterrupt:
+        print("\n[INFO] KeyboardInterrupt detected. Exiting...")
+    except Exception as e:
+        print(f"[ERROR] An unexpected error occurred: {e}")
+    finally:
+        cleanup()
+        print("Program exited cleanly.") 
