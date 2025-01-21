@@ -35,6 +35,7 @@ WD_Companion
 The companion app for my gamified STEM project. The app utilizes Flutter, enabling the creation of a single, cross-platform app. Currently struggling with flutter_blue and flutter_blue_plus implementation here.
 
 Goals
+
 Showcase my creative and technical problem-solving through real-world applications.
 Explore various platforms and technologies, including:
 ESP32 for IoT and hardware-based tools.
