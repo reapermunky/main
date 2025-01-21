@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Packet Pals</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      font-size: 16px;
+      margin: 10px;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      color: #4CAF50;
+    }
+    button {
+      font-size: 1rem;
+      margin: 0.5em 0.2em;
+      padding: 0.5em 1em;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    button:active {
+      background-color: #39843c;
+    }
+    #introDiv {
+      display: none;
+      border: 2px solid #66c;
+      background: #eef;
+      margin-bottom: 1em;
+      padding: 1em;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    #monsterList {
+      margin-top: 20px;
+      padding: 10px;
+      background: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    #pagination {
+      text-align: center;
+      margin-top: 10px;
+    }
+    #battleUI {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    #battleLog {
+      background: #f4f4f4;
+      border-left: 4px solid #4CAF50;
+      padding: 10px;
+      white-space: pre-wrap;
+    }
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      background-color: #4CAF50;
+      color: white;
+      opacity: 0.9;
+      z-index: 1000;
+      transition: opacity 0.3s ease;
+    }
+    .notification.error {
+      background-color: #f44336;
+    }
+    .notification.success {
+      background-color: #4CAF50;
+    }
+    @media (max-width: 600px) {
+      button {
+        width: 100%;
+        margin: 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Packet Pals</h1>
+
+  <!-- Intro/Tutorial -->
+  <div id="introDiv">
+    <h2 id="tutorialTitle">Welcome to Packet Pals!</h2>
+    <p id="tutorialContent">
+      Packet Pals is an adventure game where you discover and battle creatures by scanning Wi-Fi networks!
+    </p>
+    <button id="tutorialBackBtn" style="display:none;">Back</button>
+    <button id="tutorialNextBtn">Next</button>
+    <button id="tutorialDoneBtn" style="display:none;">Start Adventure</button>
+  </div>
+
+  <!-- Main Menu -->
+  <button id="scanListBtn">Scan &amp; List Monsters</button>
+  <button id="viewPartyBtn">View My Party</button>
+  <button id="downloadWigleBtn">Download Wigle Data</button>
+  <button id="clearWigleBtn">Clear Wigle Data</button>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" src="/audio/bgmusic.mp3" loop></audio>
+
+  <!-- Monster List -->
+  <div id="monsterList"></div>
+  <div id="pagination" style="display:none;">
+    <button id="prevPageBtn">Prev Page</button>
+    <button id="nextPageBtn">Next Page</button>
+    <span id="pageInfo"></span>
+  </div>
+
+  <!-- Battle UI -->
+  <div id="battleUI" style="display:none;">
+    <h2>Battle in Progress!</h2>
+    <p>Your Monster HP: <span id="partyHP"></span></p>
+    <p>Wild Monster HP: <span id="wildHP"></span></p>
+    <button data-action="attack">Attack</button>
+    <button data-action="defend">Defend</button>
+    <button data-action="capture">Capture</button>
+    <button data-action="run">Run</button>
+    <pre id="battleLog"></pre>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

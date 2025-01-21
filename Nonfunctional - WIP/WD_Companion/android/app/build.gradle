@@ -1,0 +1,35 @@
+android {
+    namespace 'com.example.packet_pals'  // Added namespace
+    compileSdkVersion 33
+
+    defaultConfig {
+        applicationId "com.example.packet_pals"  // Ensure this matches your namespace
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+
+        // If using multidex, uncomment the following line
+        // multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // ... other dependencies
+}

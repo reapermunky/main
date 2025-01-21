@@ -1,0 +1,509 @@
+/* Root Variables for Reusability */
+:root {
+  --primary-color: #00bfff;
+  --secondary-color: #39ff14;
+  --background-gradient: linear-gradient(135deg, #101010, #0a2a43);
+  --text-color: white;
+  --button-bg: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+  --button-hover-bg: #39ff14;
+  --popup-bg: rgba(0, 0, 0, 0.9);
+}
+
+/* General Styling */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at top, #202020, #101010);
+  color: var(--text-color);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+header {
+  display: flex;
+  justify-content: center; /* Center the logo */
+  align-items: center;
+  padding: 20px;
+  background-color: #2a2a2a;
+  position: relative; /* For absolute positioning of nav */
+}
+
+.logo-container {
+  display: flex; /* Flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  flex: 1; /* Allow logo-container to take available space */
+  height: 100px; /* Adjusted height for better alignment */
+  background-color: transparent; /* Optional for a clean background */
+}
+
+.logo {
+  max-width: 150px; /* Control the size of the logo */
+  height: auto; /* Maintain aspect ratio */
+  animation: glow 1.5s infinite alternate; /* Glowing effect */
+}
+
+@keyframes glow {
+  from {
+      box-shadow: 0 0 10px #00bfff, 0 0 20px #00bfff, 0 0 30px #39ff14;
+  }
+  to {
+      box-shadow: 0 0 20px #39ff14, 0 0 40px #00bfff, 0 0 60px #39ff14;
+  }
+}
+
+nav {
+  display: flex;
+  justify-content: flex-end; /* Aligns links to the right */
+  gap: 20px; /* Adds space between links */
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+nav a {
+  text-decoration: none; /* Removes underline */
+  color: var(--primary-color); /* Adjust to your theme */
+  font-size: 1.2em; /* Makes the text more prominent */
+  white-space: nowrap; /* Prevents text from wrapping */
+  transition: color 0.3s;
+}
+
+nav a:hover, nav a:focus {
+  color: var(--secondary-color); /* Adds hover and focus effect */
+  outline: 2px solid var(--secondary-color); /* Visible focus indicator */
+}
+
+/* Hero Section */
+#hero {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  text-align: center;
+  color: var(--text-color);
+  background: linear-gradient(135deg, #0a2a43, #012030);
+}
+
+#particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 20px;
+}
+
+.hero-content h1 {
+  font-size: 4em;
+  font-weight: bold;
+  text-shadow: 0 0 10px #39ff14, 0 0 20px #00bfff;
+  animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+.hero-content p {
+  font-size: 1.5em;
+  margin: 20px 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+.hero-content .btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  font-weight: bold;
+  background: var(--button-bg);
+  color: black;
+  border: none;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+}
+
+.hero-content .btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px var(--secondary-color), 0 0 20px var(--primary-color);
+  background: var(--button-hover-bg);
+}
+
+/* About Section */
+#about {
+  text-align: center;
+  padding: 50px 20px;
+  background: #1b1b1b;
+  color: var(--text-color);
+}
+
+#about h2 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+#about p {
+  max-width: 800px;
+  margin: 0 auto 40px;
+  font-size: 1.2em;
+}
+
+.about-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.about-card {
+  background-color: #2a2a2a;
+  padding: 20px;
+  border-radius: 10px;
+  width: 30%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.about-card:hover {
+  transform: scale(1.05);
+  background: var(--button-bg);
+  color: black;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.about-card h3 {
+  color: var(--secondary-color);
+  margin-bottom: 10px;
+}
+
+/* Pal of the Day Section */
+#pal-of-the-day {
+  text-align: center;
+  padding: 50px 20px;
+  background: linear-gradient(135deg, #0a2a43, #1b5e20);
+  color: var(--text-color);
+}
+
+.pal-highlight img {
+  max-width: 200px;
+  height: auto;
+  display: block;
+  margin: 0 auto 20px;
+  border: 3px solid #ffffff;
+  border-radius: 10px;
+}
+
+.pal-highlight h3 {
+  font-size: 2em;
+  margin: 10px 0;
+}
+
+.pal-highlight p {
+  font-size: 1.2em;
+  color: var(--primary-color);
+}
+
+/* Features Section */
+#features {
+  text-align: center;
+  margin: 40px 0;
+}
+
+.features-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30%;
+  margin: 10px;
+  padding: 20px;
+  background-color: #2a2a2a;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.feature-card:hover {
+  transform: scale(1.05) rotate(2deg);
+  background: var(--button-bg);
+  color: black;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.feature-card img {
+  width: 80px;
+  height: auto;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px var(--secondary-color), 0 0 10px var(--primary-color);
+}
+
+.feature-card h3 {
+  color: var(--secondary-color);
+}
+
+/* Testimonials Section */
+#testimonials {
+  text-align: center;
+  margin: 40px 0;
+  background-color: #2a2a2a;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+#testimonials h2 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+.testimonial {
+  margin: 20px auto;
+  padding: 15px;
+  background: var(--button-bg);
+  border-radius: 10px;
+  color: #202020;
+  max-width: 600px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.testimonial:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* FAQ Section */
+#faq {
+  margin: 40px auto;
+  text-align: center;
+  max-width: 800px;
+}
+
+.faq-item {
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #555;
+  border-radius: 10px;
+  background: #202020;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.faq-item:hover {
+  background: #2a2a2a;
+}
+
+.answer {
+  display: none;
+  margin-top: 10px;
+  color: #aaa;
+}
+
+/* Join the Hype Section */
+#join-hype {
+  padding: 50px 20px;
+  text-align: center;
+  background: linear-gradient(to bottom right, #012030, #0a2a43);
+  color: var(--text-color);
+  border-radius: 15px;
+  margin: 40px auto;
+}
+
+#join-hype h2 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+#join-hype .btn {
+  margin-top: 20px;
+  font-size: 1.5em;
+}
+
+/* Sign Up Section */
+#signup form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#signup input {
+  padding: 10px;
+  width: 300px;
+  margin-bottom: 10px;
+  border: 1px solid #555;
+  border-radius: 5px;
+}
+
+#signup button {
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#signup button:hover {
+  background-color: var(--secondary-color);
+}
+
+/* Scroll-to-Top Button */
+#scrollToTop {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 15px;
+  background: var(--primary-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  display: none;
+  transition: opacity 0.3s, transform 0.3s, background 0.3s;
+}
+
+#scrollToTop:hover {
+  transform: scale(1.1);
+  background: var(--secondary-color);
+}
+
+/* Easter Egg Popup */
+#easter-egg-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--popup-bg);
+  color: var(--text-color);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  text-align: center;
+}
+
+#easter-egg-popup img.special-pal {
+  width: 150px;
+  height: auto;
+  margin: 20px 0;
+  border: 3px solid var(--secondary-color);
+  border-radius: 10px;
+}
+
+#easter-egg-popup button {
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#easter-egg-popup button:hover {
+  background-color: var(--secondary-color);
+}
+
+/* Hidden Easter Egg Trigger */
+#easter-egg-trigger.hidden {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  bottom: 20px;
+  left: 20px;
+  cursor: pointer;
+  opacity: 0; /* Make it invisible */
+  z-index: 500;
+}
+
+/* Footer Styling */
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #2a2a2a;
+  color: var(--text-color);
+}
+
+footer .social-icon {
+  width: 30px;
+  height: 30px;
+  margin: 0 10px;
+  transition: transform 0.3s;
+}
+
+footer .social-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  header {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  nav {
+      position: static;
+      transform: none;
+      margin-top: 10px;
+  }
+
+  .feature-card {
+      width: 80%;
+  }
+
+  .pal-highlight img {
+      max-width: 150px;
+  }
+
+  #scrollToTop {
+      right: 10px;
+      bottom: 10px;
+  }
+
+  /* Adjust Easter Egg Popup for smaller screens */
+  #easter-egg-popup {
+      width: 90%;
+      padding: 20px;
+  }
+}
+
+/* Additional Styles for Enhanced Accessibility */
+a:focus, button:focus, input:focus {
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 2px;
+}

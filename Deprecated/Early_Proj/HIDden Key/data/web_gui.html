@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ESP32 Pen Tester</title>
+</head>
+<body>
+    <h1>Pen Tester GUI</h1>
+    <button onclick="triggerWiFiScan()">Scan Wi-Fi</button>
+    <button onclick="sendHIDPayload()">Send HID Payload</button>
+
+    <script>
+        function triggerWiFiScan() {
+            fetch('/scan').then(response => alert('Wi-Fi Scan Triggered'));
+        }
+
+        function sendHIDPayload() {
+            fetch('/hid').then(response => alert('HID Payload Sent'));
+        }
+    </script>
+</body>
+</html>

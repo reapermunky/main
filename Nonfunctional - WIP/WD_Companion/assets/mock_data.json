@@ -1,0 +1,15 @@
+{
+    "networks": [
+      {
+        "ssid": "Home_WiFi",
+        "mac": "00:11:22:33:44:55",
+        "signal_strength": -50
+      },
+      {
+        "ssid": "CoffeeShop",
+        "mac": "66:77:88:99:AA:BB",
+        "signal_strength": -70
+      }
+    ]
+  }
+  
